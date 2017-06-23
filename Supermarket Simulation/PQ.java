@@ -18,7 +18,7 @@ public class PQ implements PQInterface {
     // methods
 
     public void add(Event o, double time) {
-
+    	
         time += getCurrentTime();
         
         if (time < seg.getTime())
