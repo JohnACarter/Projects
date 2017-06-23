@@ -1,0 +1,27 @@
+#!/usr/bin/ruby
+
+require 'uri'
+require 'fileutils'
+
+port = ARGV[0]
+if port.nil?
+	puts "Please provide a port number"
+	exit -1
+end
+urlfile = File.open "./testing/urls", "r"
+urls_plain = urlfile.read
+urls_plain.gsub! "9000", port
+urls = urls_plain.split "\n" 
+urlfile.close
+Dir.mkdir "tmp" unless Dir.exists? "tmp"
+for url in urls
+	if system "wget #{url} -P tmp >/dev/null 2>&1"
+		new_loc = File.join "./tmp/", File.basename(url)
+		old_loc = File.join "./testing/", URI::parse(url).path
+		puts "ERROR: #{cmp}" unless File.exists?(new_loc) and (cmp = `cmp "#{new_loc}" "#{old_loc}"`) == ""
+		File.delete new_loc
+	else
+		puts "ERROR: wget returned exit status #{$?.exitstatus} for #{url}"
+	end
+end
+FileUtils.rm_rf "tmp"
