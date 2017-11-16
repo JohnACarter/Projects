@@ -1,8 +1,8 @@
 all: Shopper
-	java ShopperSim
+    java ShopperSim
 
 Shopper:
-	javac ShopperSim.java
+    javac ShopperSim.java
 
 clean:
-	rm *.class
+    rm *.class
